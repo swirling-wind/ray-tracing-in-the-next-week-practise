@@ -4,7 +4,7 @@
 #include "hittable.h"
 
 
-class moving_sphere : public hittable
+class moving_sphere final : public hittable
 {
 public:
 	moving_sphere() = default;
@@ -21,8 +21,8 @@ public:
 
 public:
 	point3 center0, center1;
-	double time0, time1;
-	double radius;
+    double time0{}, time1{};
+	double radius{};
 	shared_ptr<material> mat_ptr;
 };
 
