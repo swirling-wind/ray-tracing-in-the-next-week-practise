@@ -107,7 +107,7 @@ int main()
     const camera camera(lookfrom, lookat, vup, 20, aspect_ratio, aperture, dist_to_focus);
 
     // Render
-    // TODO: output_image(TEST - 10 - debug without OpenMP)
+    // TODO: Only after completing the project should it experimentally apply OpenMP and Sobol sequence.
     std::ofstream output_image("output_image(try_2_5 moving spheres).ppm");
     output_image << "P3\n" << image_width << " " << image_height << "\n255\n";
     for (int j = image_height - 1; j >= 0; --j)
