@@ -3,6 +3,7 @@
 
 #include "hittable.h"
 #include "rtweekend.h"
+#include "texture.h"
 
 class ray;
 struct hit_record;
@@ -19,7 +20,8 @@ public:
 class lambertian final : public material
 {
 public:
-	explicit lambertian(const color& a) : albedo(a) {}
+    lambertian(const color& a) : albedo(make_shared<solid_color>(a)) {}
+    lambertian(shared_ptr<texture> a) : albedo(a) {}
 
     bool scatter ([[maybe_unused]]const ray& in_ray, const hit_record& rec, color& attenuation, ray& scattered)
 	const override
@@ -31,13 +33,13 @@ public:
             scatter_direction = rec.normal_vec_of_hit;
         }
         scattered = ray(rec.hit_point, scatter_direction, in_ray.time());
-        attenuation = albedo;
+        attenuation = albedo->value(rec.u, rec.v, rec.hit_point);
         return true;
     }
 
 // ReSharper disable once CppRedundantAccessSpecifier
 public:
-	color albedo;
+    shared_ptr<texture> albedo;
 };
 
 class metal final : public material

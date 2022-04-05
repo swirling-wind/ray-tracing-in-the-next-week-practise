@@ -6,12 +6,6 @@
 class ray
 {
 public:
-	point3 orig;
-	vec3 dir;
-	double tm{};
-
-// ReSharper disable once CppRedundantAccessSpecifier
-public:
 	ray() = default;
 	ray(const point3& origin, const vec3& direction, double time = 0.0)
 		: orig(origin), dir(direction), tm(time)
@@ -25,6 +19,13 @@ public:
 	{
 		return orig + t * dir;
 	}
+
+// ReSharper disable once CppRedundantAccessSpecifier
+public:
+	point3 orig;
+	vec3 dir;
+	double tm{};
+
 };
 
 #endif

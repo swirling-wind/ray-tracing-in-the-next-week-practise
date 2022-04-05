@@ -1,12 +1,13 @@
 #include "rtweekend.h"
 
-#include "color.h"
-#include "hittable_list.h"
-#include "sphere.h"
 #include <iostream>
 #include "camera.h"
+#include "color.h"
+#include "hittable_list.h"
 #include "material.h"
 #include "moving_sphere.h"
+#include "sphere.h"
+#include "texture.h"
 
 color ray_color(const ray& r, const hittable& world, int depth)
 {
@@ -32,14 +33,14 @@ hittable_list random_scene()
 {
     hittable_list world;
 
-    auto ground_material = make_shared<lambertian>(color(0.5, 0.5, 0.5));
-    world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, ground_material));
+    auto checker = make_shared<checker_texture>(color(0.2, 0.3, 0.1), color(0.9, 0.9, 0.9));
+    world.add(make_shared<sphere>(point3(0, -1000, 0), 1000, make_shared<lambertian>(checker)));
 
     for (int a = -11; a < 11; a++)
     {
         for (int b = -11; b < 11; b++)
         {
-            auto choose_mat = random_double();
+	        const double choose_mat = random_double();
             point3 center(a + 0.9 * random_double(), 0.2, b + 0.9 * random_double());
 
             if ((center - vec3(4, 0.2, 0)).length() > 0.9)
@@ -90,12 +91,12 @@ int main()
 {
     // Image
     const auto aspect_ratio = 16.0 / 9.0;
-    const int image_width = 600;
+    const int image_width = 400;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel =150;
+    const int samples_per_pixel =100;
     const int max_depth = 50;
 
-    const auto world = random_scene();
+    const hittable_list world = random_scene();
 
     // Camera
     const point3 lookfrom(13, 2, 3);
@@ -108,7 +109,7 @@ int main()
 
     // Render
     // TODO: Only after completing the project should it experimentally apply OpenMP and Sobol sequence.
-    std::ofstream output_image("output_image(try_2_5 moving spheres).ppm");
+    std::ofstream output_image("output_image(0405_4_13).ppm");
     output_image << "P3\n" << image_width << " " << image_height << "\n255\n";
     for (int j = image_height - 1; j >= 0; --j)
     {
